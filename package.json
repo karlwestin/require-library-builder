@@ -1,0 +1,13 @@
+{
+  "name": "require-librarybuilder",
+  "version": "0.1.1",
+  "dependencies": {
+    "requirejs": ">=2.1.2",
+    "rjs": ">=2.8.0"
+   },
+   "main": "index",
+   "preferGlobal": "true",
+   "bin": {
+     "require-librarybuilder": "index.js"
+   }
+}
