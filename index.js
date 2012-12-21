@@ -8,24 +8,27 @@
  * Builds the modules with those 'lib' files excluded
  * Creates a require-config with paths
  */
-var requirejs = require("requirejs"),
-    Q = require("q");
+var configPath = process.argv[2];
+console.log("reading config from: %s", configPath);
+var globalConfig = require(process.cwd() + "/" + configPath);
 
-var builds = ["script", "script2"],
+var requirejs = require("requirejs"),
+    Q = require("q"),
+    ce = require("cloneextend");
+
+var modules = globalConfig.modules,
     res = [];
 
-var config = {
-  baseUrl: "./"
-};
+delete globalConfig.modules;
 
-var configs = builds.map(function(name) {
+var configs = modules.map(function(mod) {
   var def = Q.defer();
 
-  var config = {
-    baseUrl: "./",
-    name: name,
-    out: name + "-b.js"
-  };
+  var config = ce.cloneextend(globalConfig, {
+    optimize: "none", // builds faster, this result is just gonna get thrown out anyway
+    name: mod.name,
+    out: mod.out
+  });
 
   requirejs.optimize(config, function(results) {
     def.resolve({ results: results, config: config });
@@ -76,20 +79,22 @@ function intersect(confs) {
 }
 
 /*
- * Building lib (and other files with lib excluded
+ * Building lib (and other files with lib excluded)
  */
 function buildLib(settings) {
   var lib = filterPaths(settings.lib);
-  var config = {
-    baseUrl: "./",
+  var config = ce.cloneextend(globalConfig, {
     name: lib[0],
     include: lib.slice(1),
-    out: "lib.js"
-  };
+    out: globalConfig.lib
+  });
+  console.log("Building lib file including:\n", lib);
   requirejs.optimize(config, function() {});
+
 
   var configs = settings.confs.map(function(obj) {
     obj.config.exclude = lib;
+    obj.config.optimize = globalConfig.optimize;
     requirejs.optimize(obj.config, function() {});
     return obj.config;
   });
@@ -110,6 +115,13 @@ function generateConfig(parts) {
     paths[path] = name;
   });
   paths[parts[0].name] = name;
+  //transfer paths from global config to point to the new lib file
+  var keys = Object.keys(paths);
+  for(var key in globalConfig.paths) {
+    if(keys.indexOf(globalConfig.paths[key]) !== -1) {
+      paths[key] = name;
+    }
+  }
   //directions for modules
   modules.forEach(function(mod) {
     paths[mod.name] = filterPath(mod.out);
