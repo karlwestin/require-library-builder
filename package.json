@@ -3,7 +3,9 @@
   "version": "0.1.1",
   "dependencies": {
     "requirejs": ">=2.1.2",
-    "rjs": ">=2.8.0"
+    "rjs": ">=2.8.0",
+    "q": "0.8.11",
+    "cloneextend": "0.0.3"
    },
    "main": "index",
    "preferGlobal": "true",
