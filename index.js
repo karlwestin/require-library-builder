@@ -104,13 +104,15 @@ function generateConfig(parts) {
   var paths = {},
       name = filterPath(parts[0].out),
       modules = parts.slice(1);
-  // adding the included files from lib
+
+  // directions for lib-files
   parts[0].include.forEach(function(path) {
-    paths[path.replace("./", "")] = name;
+    paths[path] = name;
   });
-  paths[parts[0].name.replace("./", "")] = name;
+  paths[parts[0].name] = name;
+  //directions for modules
   modules.forEach(function(mod) {
-    paths[mod.name.replace("./", "")] = filterPath(mod.out);
+    paths[mod.name] = filterPath(mod.out);
   });
 
   var pathString = JSON.stringify(paths);
@@ -124,7 +126,7 @@ function filterPaths(paths) {
 
 function filterPath(path) {
   var cwd = process.cwd();
-  return path.replace(cwd, ".").replace(".js", "");
+  return path.replace(cwd + "/", "").replace(".js", "");
 }
 
 /*
