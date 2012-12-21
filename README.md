@@ -6,18 +6,18 @@ and because the way AMD-build-systems work, the user will have to reload this co
 
 Require-library-builder uses r.js to trace common dependencies of the modules, bundling those into a separate lib.js-file.
 
-Before:
-mod1-build.js (100k) // 50k in each of those are shared dependencies
-mod2-build.js (100k)
--------------------
-total:         200k
+**Before:**  
+mod1-build.js (100k) // 50k in each of those are shared dependencies  
+mod2-build.js (100k)  
+...................  
+total:         200k  
 
-After:
-mod1-build.js (50k)
-mod2-build.js (50k)
-lib.js        (50k)
--------------------
-total:         150k
+**After:**  
+mod1-build.js (50k)  
+mod2-build.js (50k)  
+lib.js        (50k)  
+...................  
+total:         150k  
 
 How to:
 ------
