@@ -1,0 +1,16 @@
+{
+  "baseUrl": "./",
+  "lib": "build/lib.js",
+  "modules": [
+  { "name": "widgets/mod1", "out": "build/mod1.js" },
+  { "name": "views/mod2", "out": "build/mod2.js" }
+  ],
+  "paths": {
+      "hbs"               : "lib/hbs",
+      "underscore"        : "lib/hbs/underscore",
+      "i18nprecompile"    : "lib/hbs/i18nprecompile",
+      "json2"             : "lib/hbs/json2",
+      "handlebars"        : "lib/handlebars",
+  },
+  "optimize": "uglify"
+}
